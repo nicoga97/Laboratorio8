@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ItemMapper">
+
+    
+    <insert parameterType="map" id="insertarItem">
+        insert into VI_ITEMS values (#{item.id}, #{item.nombre}, #{item.descripcion}, #{item.fechaLanzamiento}, #{item.tarifaxDia}, 
+        #{item.formatoRenta}, #{item.genero}, #{item.tipo.id});
+    </insert>
+    <select parameterType="map" id="consultarItems" resultMap="ItemResult">
+        select 
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+        FROM VI_ITEMS as i 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id ;
+    </select>
+    <select parameterType="map" id="consultarItemsDisponibles" resultMap="ItemResult">
+        select 
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+        FROM VI_ITEMS as i 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+        left join VI_ITEMRENTADO as re on re.ITEMS_id=i.id
+        WHERE re.id IS NULL;
+    </select>
+    <select parameterType="map" id="consultarItem" resultMap="ItemResult">
+        select 
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+        FROM VI_ITEMS as i 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+        
+        where i.id=#{iditem};
+    </select>
+    
+    <select parameterType="map" id="consultarCostoAlquiler" resultMap="ItemResult">
+        select i.tarifaxdia * #{num} as itarifaxdia FROM VI_ITEMS as i WHERE i.id = #{iditem};
+    </select>
+    
+    <update parameterType="map" id="actualizarTarifaItem">
+        update VI_ITEMS set tarifaxdia = #{tarifa} where id = #{iditem};
+    </update>
+
+    <resultMap type='Item' id='ItemResult'>
+        <id property='id' column='iid'/>
+        <result property='nombre' column='inombre'/>
+        <result property='descripcion' column='idescripcion'/>
+        <result property='fechaLanzamiento' column='ifechalanzamiento'/>
+        <result property='tarifaxDia' column='itarifaxdia'/>
+        <result property='formatoRenta' column='iformatorenta'/>
+        <result property='genero' column='igenero'/>  
+        <association property="tipo" javaType="TipoItem" resultMap='edu.eci.pdsw.sampleprj.dao.mybatis.mappers.TipoItemMapper.TipoItemResult'></association>      
+    </resultMap>
+    
+    
+</mapper>

@@ -1,0 +1,78 @@
+<!DOCTYPE xhtml PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" >
+
+<xhtml
+    xmlns="http://www.w3c.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:p="http://primefaces.org/ui" 
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head> </h:head>
+
+    <h:body>
+
+       
+        <h:form id="bloque" >
+            
+            <p:dataTable id="tabla1" var="itemRentado" value="#{AlquilerItems.itemsRentadosClientes}" 
+                         rowKey="#{ItemRentado.nombre}" >
+
+                <f:facet name="header">
+                    Registro de Alquileres
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        Items no regresados 
+                    </f:facet>
+                    #{itemRentado.item.nombre}
+                </p:column>
+                <p:column headerText="" >
+                    <f:facet name="header">
+                        Multa
+                    </f:facet>
+                    #{itemRentado.multa}
+                </p:column>
+
+
+            </p:dataTable>
+
+            <br></br><br></br>
+            <p:outputLabel value="Agregar nuevo alquiler " /><br></br><br></br>
+            <p:outputLabel for="id" value="Codigo de item: " />
+            <p:inputText id="id" value="#{AlquilerItems.itemId}" required="true" /><br></br><br></br>
+            <p:outputLabel for="dias" value="Dias de alquiler: " />
+            <p:inputText id="dias" value="#{AlquilerItems.dias}" required="true"/><br></br><br></br>
+
+
+
+            <p:commandButton value="Agregar Alquiler" id="ajax" update="bloque"  actionListener="#{AlquilerItems.buttonListener1()}" styleClass="ui-priority-primary" >
+                <p:ajax update="tabla2" resetValues="true" />
+                <p:ajax update="tabla1" resetValues="true" />
+            </p:commandButton><p:spacer width="500" height="40" />
+
+            <p:dataTable id="tabla2" var="itemsDisponibles" value="#{AlquilerItems.itemsDisponibles}" 
+                         rowKey="#{itemsDisponibles.nombre}" >
+
+                <f:facet name="header">
+                    Registro de Items Disponibles
+                </f:facet>
+                <p:column>
+                    <f:facet name="header">
+                        Items  
+                    </f:facet>
+                    #{itemsDisponibles.nombre}
+                </p:column>
+                <p:column headerText="" >
+                    <f:facet name="header">
+                        ID
+                    </f:facet>
+                    #{itemsDisponibles.id}
+                </p:column>
+
+
+            </p:dataTable>
+        </h:form> 
+
+
+    </h:body>
+
+</xhtml>

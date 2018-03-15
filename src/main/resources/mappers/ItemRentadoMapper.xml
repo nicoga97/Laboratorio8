@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ItemRentadoMapper">
+
+    
+    <select parameterType="map" id="consultarItemRentado" resultMap="ItemRentadoResult">
+        select 
+        a.id as aid,
+        a.CLIENTES_documento as adocu,
+        a.ITEMS_id as iditems,
+        a.fechainiciorenta as afechainiciorenta,
+        a.fechafinrenta as afechafinrenta,
+        
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+        
+        FROM VI_ITEMRENTADO as a 
+        left join VI_ITEMS as i on i.id=a.ITEMS_id 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+        
+        where a.id= #{idItemRentado};
+    </select>
+    
+    
+    
+    <resultMap type='ItemRentado' id='ItemRentadoResult'>
+        <id property='id' column='aid'/>
+     
+        <result property='fechainiciorenta' column='afechainiciorenta'/>
+        <result property='fechafinrenta' column='afechafinrenta'/> 
+        <association property="item" javaType="Item" resultMap='edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ItemMapper.ItemResult'></association>      
+    </resultMap>
+    
+    
+</mapper>

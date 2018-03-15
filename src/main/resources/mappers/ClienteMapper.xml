@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ClienteMapper">
+    <select parameterType="map" id="consultarClientes" resultMap="ClienteResult">
+        select
+    
+        c.nombre as cnombre,
+        c.documento as cdocumento,
+        c.telefono as ctelefono,
+        c.direccion as cdireccion,
+        c.email as cemail,
+        c.vetado as cvetado,
+    
+        ir.id as irid,
+        ir.fechainiciorenta as irfechainiciorenta,
+        ir.fechafinrenta as irfechafinrenta,
+    
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+
+    
+        FROM VI_CLIENTES as c 
+        left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+        left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id ;
+    </select>
+    <select parameterType="map" id="consultarCliente" resultMap="ClienteResult">
+        select
+    
+        c.nombre as cnombre,
+        c.documento as cdocumento,
+        c.telefono as ctelefono,
+        c.direccion as cdireccion,
+        c.email as cemail,
+        c.vetado as cvetado,
+    
+        ir.id as irid,
+        ir.fechainiciorenta as irfechainiciorenta,
+        ir.fechafinrenta as irfechafinrenta,
+    
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+
+    
+        FROM VI_CLIENTES as c 
+        left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+        left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+        
+        WHERE c.documento = #{idcli};
+    </select>
+    <select parameterType="map" id="consultarItems" resultMap="ItemRentadoResult">
+        select
+        ir.id as irid,
+        ir.fechainiciorenta as irfechainiciorenta,
+        ir.fechafinrenta as irfechafinrenta,
+    
+        i.id as iid,
+        i.nombre as inombre,
+        i.descripcion as idescripcion,
+        i.fechalanzamiento as ifechalanzamiento,
+        i.tarifaxdia as itarifaxdia,
+        i.formatorenta as iformatorenta,
+        i.genero as igenero,        
+        ti.id as tiid,
+        ti.descripcion as tidescripcion
+
+    
+        FROM  VI_ITEMRENTADO as ir 
+        
+        left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+        
+        WHERE ir.CLIENTES_documento = #{idcli};
+    </select>
+    <insert parameterType="map" id="registrarAlquilerCliente" >
+        insert into VI_ITEMRENTADO VALUES (#{id},#{idcli},#{iditem},#{fecha},#{fechafin});
+    </insert>
+    
+    <insert parameterType="map" id="agregarCliente">
+        insert into VI_CLIENTES VALUES (#{cli.documento},#{cli.nombre},#{cli.telefono},#{cli.direccion},#{cli.email},#{cli.vetado});
+    </insert>
+    <insert parameterType="map" id="vetarCliente">
+        UPDATE VI_CLIENTES SET vetado = #{estado} WHERE documento = #{idcli};
+    </insert>
+     
+    
+    <resultMap type='Cliente' id='ClienteResult'>
+        <id property='documento' column='cdocumento'/>
+        <result property='nombre' column='cnombre'/>
+        <result property='telefono' column='ctelefono'/>
+        <result property='direccion' column='cdireccion'/>
+        <result property='email' column='cemail'/>
+        <result property='vetado' column='cvetado'/>      
+        <collection property='rentados' ofType='ItemRentado' resultMap='ItemRentadoResult'></collection>
+    </resultMap>
+
+    <resultMap type='ItemRentado' id='ItemRentadoResult'>
+        <id property='id' column='irid'/>
+        <result property='fechainiciorenta' column='irfechainiciorenta'/>
+        <result property='fechafinrenta' column='irfechafinrenta'/> 
+        <association property="item" javaType="Item" resultMap='edu.eci.pdsw.sampleprj.dao.mybatis.mappers.ItemMapper.ItemResult'></association>      
+    </resultMap>
+ 	
+</mapper>
