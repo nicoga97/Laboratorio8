@@ -120,7 +120,7 @@
     
     <build>
         <plugins>
-            <!-- Plugin configuration for Heroku compatibility. -->
+            <!-- Plugin configuration for Heroku compatibility.1 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
