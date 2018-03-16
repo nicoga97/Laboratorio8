@@ -52,7 +52,7 @@
             <p:inputText id="telefono" value="#{AlquilerItems.tel}" required="true"/><br/><br/>
             <p:outputLabel for="email" value="Email: " />
             <p:inputText id="email" value="#{AlquilerItems.em}" required="true"/><br/><br/>
-            <p:commandButton value="Agregar" id="ajax" update="tabla"  actionListener="#{AlquilerItems.buttonListener()}" styleClass="ui-priority-primary" >
+            <p:commandButton value="Agregar" id="ajax" update="bloque"  actionListener="#{AlquilerItems.buttonListener()}" styleClass="ui-priority-primary" >
                  <p:ajax update="tabla" resetValues="true" />
             </p:commandButton>
         </h:form>  
